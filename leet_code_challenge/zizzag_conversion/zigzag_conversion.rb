@@ -1,23 +1,24 @@
 def zigzag_conversion(s, num_rows)
-  return if s.length == 1 || s.length <= num_rows
+  if s.length == 1 || s.length < num_rows || num_rows == 1
+    return s
+  end
 
   str_arr = s.chars
   terms = 2 * (num_rows - 1)
   base_interval = terms
-  head = terms
+  initial = terms
   stored_str_arr = []
-  first_col_letters = str_arr.first(num_rows)
   zig_zag_letters = ""
   
 
   i = 0
 
-  while i < first_col_letters.length
-    unless i == first_col_letters.length - 1
-      stored_str_arr << [first_col_letters[i], terms]
+  while i < num_rows
+    unless i == num_rows - 1
+      stored_str_arr << [str_arr[i], terms]
       terms -= 2
     else
-      stored_str_arr << [first_col_letters[i], head]
+      stored_str_arr << [str_arr[i], initial]
     end
     i += 1
   end
@@ -26,22 +27,25 @@ def zigzag_conversion(s, num_rows)
   for i in 0...stored_str_arr.length
     head = stored_str_arr[i][1]
     tail = 0
+
+    arr_len = str_arr[i..].length
     j = 0
-    
+
     while j < str_arr.length
+
       if i == 0 || i == stored_str_arr.length - 1
-        unless stored_str_arr[i][1] >= str_arr[i..].length || head > str_arr[i..].length
+        unless stored_str_arr[i][1] >= arr_len || head > arr_len
           new_arr = str_arr[i..]
           stored_str_arr[i][0] += new_arr[stored_str_arr[i][1]]
           stored_str_arr[i][1] += head
         end
       else
-        unless stored_str_arr[i][1] >= str_arr[i..].length || head > str_arr[i..].length
+        unless stored_str_arr[i][1] >= arr_len || head > arr_len
           new_arr = str_arr[i..]
           if j == 0
             stored_str_arr[i][0] += new_arr[head]
 
-            unless base_interval >= str_arr[i..].length
+            unless base_interval >= arr_len
               stored_str_arr[i][0] += new_arr[base_interval]
             end
             
@@ -49,11 +53,11 @@ def zigzag_conversion(s, num_rows)
             tail = base_interval + base_interval
         
           else
-            unless head >= str_arr[i..].length
+            unless head >= arr_len
               stored_str_arr[i][0] += new_arr[head]
             end
         
-            unless tail >= str_arr[i..].length
+            unless tail >= arr_len
               stored_str_arr[i][0] += new_arr[tail]
             end
             
@@ -65,20 +69,21 @@ def zigzag_conversion(s, num_rows)
       j += 1
     end
   end
+  
 
   zig_zag_letters = stored_str_arr.map {|result| result[0]}
 
  return zig_zag_letters.join()
 end
 
-
+# p zigzag_conversion("abcd" ,2)
 # p zigzag_conversion("PAYPALISHIRINGTONSOFDEVELOPERINMYTOWNNOWQAb", 5) 
 # p zigzag_conversion("ABCDE", 3)
 # p zigzag_conversion("PAYPALISHIRING", 3)
 
-p zigzag_conversion("zpaqojvamrjkdfwfsfjoblbhtjcpdbjdqkvevshhjssnzosstdgwqhelqibumkzcwujsnsbyktlkkgeflkectkpjuqfgdgjbduvqmxqysckekomvaqxtanfufmbktmmwijouieubifhsvtowjlrjawgijjuexiafsqbauvddclvaejyoxrzzohjzqefpmhugxxhtvmwzxuzcfzsertghbpittnjiudorbxmwkjvjfxnmwfrpzxwametiresniiglgtjsegdjfrvcyotxlqzawviqzcdjkkwsffkjoquthpxfgrfrjetfbdvdfbmqnlisqvbglvaumxbsqgmznffojcrqdggqrrijmlqzgstvpupidbhqjmgupakuitlzktkwhcxpuqkmmcupfbhoqokfovzwomxyijwpmteglrsztmpyowpemzlcumakzxkjhgyvbcbovuooifpybeeqdrsaetkfsvobdmwhqyvoujceotdsxhkbbcdfxnmqkatooqxgqswkebosutmsdwvebylynxqyzkonalvqfscjtqenmqhppetqceqsbhqcrgrttmjygnibdorreygvfblhfcbiltmczdvuqgtytdayrrqxrytwagghkhsvdezeiuzacuyvxawqrmplmkjmrpwbzqzcuygevhexbfvafrqzfikrstgjlenkuooqmwvhebhhgciovanaiztbszmffbrzpfscenlkqsrzwznrcctkbnnvoaduduvtanxgckqtfhsbjhvllovobllqlomqjhjlvgrxthsyqmzztukgliumtgeguqwdygovofuhonffzhevdrbozwdschawawcyeqvvypeocmtctaxyrapswsmybmxbkzbrrwmrmqgqcbuxdtwuuloqfargoqkzrlqiiecwukozljwpeulyharmc", 623)
+# p zigzag_conversion("zpaqojvamrjkdfwfsfjoblbhtjcpdbjdqkvevshhjssnzosstdgwqhelqibumkzcwujsnsbyktlkkgeflkectkpjuqfgdgjbduvqmxqysckekomvaqxtanfufmbktmmwijouieubifhsvtowjlrjawgijjuexiafsqbauvddclvaejyoxrzzohjzqefpmhugxxhtvmwzxuzcfzsertghbpittnjiudorbxmwkjvjfxnmwfrpzxwametiresniiglgtjsegdjfrvcyotxlqzawviqzcdjkkwsffkjoquthpxfgrfrjetfbdvdfbmqnlisqvbglvaumxbsqgmznffojcrqdggqrrijmlqzgstvpupidbhqjmgupakuitlzktkwhcxpuqkmmcupfbhoqokfovzwomxyijwpmteglrsztmpyowpemzlcumakzxkjhgyvbcbovuooifpybeeqdrsaetkfsvobdmwhqyvoujceotdsxhkbbcdfxnmqkatooqxgqswkebosutmsdwvebylynxqyzkonalvqfscjtqenmqhppetqceqsbhqcrgrttmjygnibdorreygvfblhfcbiltmczdvuqgtytdayrrqxrytwagghkhsvdezeiuzacuyvxawqrmplmkjmrpwbzqzcuygevhexbfvafrqzfikrstgjlenkuooqmwvhebhhgciovanaiztbszmffbrzpfscenlkqsrzwznrcctkbnnvoaduduvtanxgckqtfhsbjhvllovobllqlomqjhjlvgrxthsyqmzztukgliumtgeguqwdygovofuhonffzhevdrbozwdschawawcyeqvvypeocmtctaxyrapswsmybmxbkzbrrwmrmqgqcbuxdtwuuloqfargoqkzrlqiiecwukozljwpeulyharmc", 623)
 
-# PAYPALISHIRINGTONSOFDEVELOPERINMYTOWN
+# PAYPALISHIRINGTON SOFDEVELOPERINMYTOWN
 
 # 3,1,3,1,3
 
@@ -102,7 +107,7 @@ p zigzag_conversion("zpaqojvamrjkdfwfsfjoblbhtjcpdbjdqkvevshhjssnzosstdgwqhelqib
  #5, 1, 1, 1,5,1,1,1,5
 # P          H           N          L           Y           Q               5 row  5 - 2 = 3 ===> 5 + 3 => 8  
 # A       S  I        O  S       E  O        M  T        W  A          8 - 2 = 6 ===>  8 - 6 => 2
-# Y    I     R      T    O     V    P      N    O     O              6 - 2 = 4 ===>  8 - 4 => 4
+# Y    I     R      T    O     V    P      N    O     O     b        6 - 2 = 4 ===>  8 - 4 => 4
 # P  L       I   G       F   E      E   I       W  N                  4 - 2 = 2 ===>  8 - 2 => 6
 # A          N           D          R           N                    2 - 2 = 0 ===>  8 - 0 ==> 8
 
