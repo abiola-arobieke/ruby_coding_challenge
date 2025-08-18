@@ -1,22 +1,20 @@
 def max_area(height)
-  max_areas = []
-  n = height.length
+  start_index = 0
+  end_index = height.length - 1
+  maximum_area = []
 
+  while start_index < end_index
+    distance = end_index - start_index
+    maximum_area << [height[start_index], height[end_index]].min * distance
 
-  for i in 0...n
-    j = i + 1
-      while j < n
-        if height[i] <= height[j]
-          max_areas << height[i] * (j - i)
-        elsif height[i] >= height[j]
-          max_areas << height[j] * (j - i)
-        end
-        j += 1
-      end
+    if height[start_index] < height[end_index]
+      start_index += 1
+    else
+      end_index -= 1
+    end
   end
-
-  return max_areas.max
-
+  
+ return maximum_area.max
 end
 
 # height = [1,8,6,2,5,4,8,3,7]
