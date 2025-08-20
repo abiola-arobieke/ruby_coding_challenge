@@ -7,56 +7,31 @@ def int_to_roman(num)
   i = 0
 
   while i < num_str_arr.length
+    place_value = "1"
     num_str_arr[i] += "0" * nearest_zero_count
+    num = num_str_arr[i].to_i
     len = num_str_arr[i].length
+    place_value += "0" * nearest_zero_count
+    place_value_int = place_value.to_i
+  
     if len >= 4
-      val = (num_str_arr[i].to_i) / 1000
-      result += roman_symbols["1000"] * val
-     
-    elsif len == 3
-        if num_str_arr[i].to_i == 900
-          result += roman_symbols["100"] + roman_symbols["1000"]
-        elsif num_str_arr[i].to_i > 500 && num_str_arr[i].to_i < 900
-          result += roman_symbols["500"]
-          val = ((num_str_arr[i].to_i) - 500) / 100
-          result += roman_symbols["100"] * val
-        elsif num_str_arr[i].to_i == 500
-          result += roman_symbols["500"]
-        elsif num_str_arr[i].to_i == 400
-          result += roman_symbols["100"] + roman_symbols["500"]
-        else
-          val = num_str_arr[i].to_i / 100
-          result += roman_symbols["100"] * val
-        end
-    elsif len == 2
-      if num_str_arr[i].to_i == 90
-        result += roman_symbols["10"] + roman_symbols["100"]
-      elsif num_str_arr[i].to_i > 50 && num_str_arr[i].to_i < 90
-        result += roman_symbols["50"]
-        val = ((num_str_arr[i].to_i) - 50) / 10
-        result += roman_symbols["10"] * val
-      elsif num_str_arr[i].to_i == 50
-        result += roman_symbols["50"]
-      elsif num_str_arr[i].to_i == 40
-        result += roman_symbols["10"] + roman_symbols["50"]
+      val = (num) / place_value_int
+      result += roman_symbols[place_value] * val
+
+    else
+      if num == place_value_int * 9
+        result += roman_symbols[place_value] + roman_symbols[(place_value_int * 10).to_s]
+      elsif num > place_value_int * 5 && num < place_value_int * 9
+        result += roman_symbols[(place_value_int * 5).to_s]
+        val = ((num) - (place_value_int * 5)) / place_value_int
+        result += roman_symbols[place_value] * val
+      elsif num == place_value_int * 5
+        result += roman_symbols[(place_value_int * 5).to_s]
+      elsif num == place_value_int * 4
+        result += roman_symbols[place_value] + roman_symbols[(place_value_int * 5).to_s]
       else
-        val = ((num_str_arr[i].to_i)) / 10
-        result += roman_symbols["10"] * val
-      end
-    elsif len == 1
-      if num_str_arr[i].to_i == 9
-        result += roman_symbols["1"] + roman_symbols["10"]
-      elsif num_str_arr[i].to_i > 5 && num_str_arr[i].to_i < 9
-        result += roman_symbols["5"]
-        val = (num_str_arr[i].to_i) - 5
-        result += roman_symbols["1"] * val
-      elsif num_str_arr[i].to_i == 5
-        result += roman_symbols["5"]
-      elsif num_str_arr[i].to_i == 4
-        result += roman_symbols["1"] + roman_symbols["5"]
-      else
-        val = (num_str_arr[i].to_i)
-        result += roman_symbols["1"] * val
+        val = num / place_value_int
+        result += roman_symbols[place_value] * val
       end
     end
     nearest_zero_count -= 1
